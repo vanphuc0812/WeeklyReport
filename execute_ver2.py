@@ -404,7 +404,7 @@ def main():
         REPORT.save('./Report.xlsx')
         print('.......................................................................................')
         print('')
-        print('Suscessfully create report')
+        print('Finishing create report ^_^')
     else:
         print('The week you choose is not exist in the sample report')
 
