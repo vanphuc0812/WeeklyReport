@@ -257,30 +257,30 @@ def main():
                 for i in range(len(list_change) - 1):
                     if(counter<10):
                         counter+=1
-                        if check_exist(shipcode_list[i],TAIWAN):
-                            if list_change[i] <0:
-                                cmt1+= str(shipcode_list[i]) + ' decreased ' + str(abs(list_change[i])) + ' teus, '
-                        else:   cmt2+= str(shipcode_list[i]) + ' , '
+                        # if check_exist(shipcode_list[i],TAIWAN):
+                        if list_change[i] <0:
+                            cmt1+= str(shipcode_list[i]) + ' decreased ' + str(abs(list_change[i])) + ' teus, '
+                        # else:   cmt2+= str(shipcode_list[i]) + ' , '
                 REPORT_ws._get_cell(row=27,column=base_col).value =cmt1 
-                REPORT_ws._get_cell(row=28,column=base_col).value ='No cargo: '+cmt2 
+                # REPORT_ws._get_cell(row=28,column=base_col).value ='No cargo: '+cmt2 
             elif get_colunm_total('FCL/20\'',TAIWAN_LASTWEEK) +get_colunm_total('FCL/40\'',TAIWAN_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',TAIWAN_LASTWEEK)*2 < get_colunm_total('FCL/20\'',TAIWAN) +get_colunm_total('FCL/40\'',TAIWAN)*2 +get_colunm_total('FCL/40\'HQ',TAIWAN)*2 :
                 REPORT_ws._get_cell(row=26,column=base_col).value = 'TAIWAN: volume of this week had been increased than last week due to:'
                 if len(list_change) <10 :
                     for i in range(len(list_change)):
-                        if check_exist(shipcode_list[i],TAIWAN):
-                            if list_change[i] >0:
-                                cmt1+= str(shipcode_list[i]) + ' increased ' + str(list_change[i]) + ' teus, ' 
-                        else:   cmt2+= str(shipcode_list[i])
+                        # if check_exist(shipcode_list[i],TAIWAN):
+                        if list_change[i] >0:
+                            cmt1+= str(shipcode_list[i]) + ' increased ' + str(list_change[i]) + ' teus, ' 
+                        # else:   cmt2+= str(shipcode_list[i])
                     REPORT_ws._get_cell(row=27,column=base_col).value =cmt1 
-                    REPORT_ws._get_cell(row=28,column=base_col).value ='No cargo: ' + cmt2 
+                    # REPORT_ws._get_cell(row=28,column=base_col).value ='No cargo: ' + cmt2 
                 else:
                     for i in range(len(list_change)-10 ,len(list_change)):
-                        if check_exist(shipcode_list[i],TAIWAN):
-                            if list_change[i] >0:
-                                cmt1+= str(shipcode_list[i]) + ' increased ' + str(list_change[i]) + ' teus, ' 
-                        else:   cmt2+= str(shipcode_list[i])
+                        # if check_exist(shipcode_list[i],TAIWAN):
+                        if list_change[i] >0:
+                            cmt1+= str(shipcode_list[i]) + ' increased ' + str(list_change[i]) + ' teus, ' 
+                        # else:   cmt2+= str(shipcode_list[i])
                     REPORT_ws._get_cell(row=27,column=base_col).value =cmt1 
-                    REPORT_ws._get_cell(row=28,column=base_col).value ='No cargo: ' + cmt2 
+                    # REPORT_ws._get_cell(row=28,column=base_col).value ='No cargo: ' + cmt2 
             else: 
                 REPORT_ws._get_cell(row=26,column=base_col).value = 'TAIWAN: volume of this week is no change.'
         except:
@@ -296,30 +296,30 @@ def main():
                 for i in range(len(JP_list_change) - 1):
                     if(counter<10):
                         counter+=1
-                        if check_exist(JP_shipcode_list[i],JAPAN):
-                            if JP_list_change[i]<0:
-                                cmt1+= str(JP_shipcode_list[i]) + ' decreased ' + str(abs(JP_list_change[i])) + ' teus, '
-                        else:   cmt2+= str(JP_shipcode_list[i]) + ' , '
+                        # if check_exist(JP_shipcode_list[i],JAPAN):
+                        if JP_list_change[i]<0:
+                            cmt1+= str(JP_shipcode_list[i]) + ' decreased ' + str(abs(JP_list_change[i])) + ' teus, '
+                        # else:   cmt2+= str(JP_shipcode_list[i]) + ' , '
                 REPORT_ws._get_cell(row=23,column=base_col).value =cmt1 
-                REPORT_ws._get_cell(row=24,column=base_col).value ='No cargo: '+cmt2 
+                # REPORT_ws._get_cell(row=24,column=base_col).value ='No cargo: '+cmt2 
             elif get_colunm_total('FCL/20\'',JAPAN_LASTWEEK) +get_colunm_total('FCL/40\'',JAPAN_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',JAPAN_LASTWEEK)*2 < get_colunm_total('FCL/20\'',JAPAN) +get_colunm_total('FCL/40\'',JAPAN)*2 +get_colunm_total('FCL/40\'HQ',JAPAN)*2 :
                 REPORT_ws._get_cell(row=22,column=base_col).value = 'JAPAN: volume of this week had been increased than last week due to:'
                 if len(JP_list_change) <10 :
                     for i in range(len(JP_list_change)):
-                        if check_exist(JP_shipcode_list[i],JAPAN):
-                            if JP_list_change[i]>0:
-                                cmt1+= str(JP_shipcode_list[i]) + ' increased ' + str(JP_list_change[i]) + ' teus, ' 
-                        else:   cmt2+= str(JP_shipcode_list[i])
+                        # if check_exist(JP_shipcode_list[i],JAPAN):
+                        if JP_list_change[i]>0:
+                            cmt1+= str(JP_shipcode_list[i]) + ' increased ' + str(JP_list_change[i]) + ' teus, ' 
+                        # else:   cmt2+= str(JP_shipcode_list[i])
                     REPORT_ws._get_cell(row=23,column=base_col).value =cmt1 
-                    REPORT_ws._get_cell(row=24,column=base_col).value ='No cargo: ' + cmt2 
+                    # REPORT_ws._get_cell(row=24,column=base_col).value ='No cargo: ' + cmt2 
                 else:
                     for i in range(len(JP_list_change)-10 ,len(JP_list_change)):
-                        if check_exist(JP_shipcode_list[i],JAPAN):
-                            if JP_list_change[i]>0:
-                                cmt1+= str(JP_shipcode_list[i]) + ' increased ' + str(JP_list_change[i]) + ' teus, ' 
-                        else:   cmt2+= str(JP_shipcode_list[i])
+                        # if check_exist(JP_shipcode_list[i],JAPAN):
+                        if JP_list_change[i]>0:
+                            cmt1+= str(JP_shipcode_list[i]) + ' increased ' + str(JP_list_change[i]) + ' teus, ' 
+                        # else:   cmt2+= str(JP_shipcode_list[i])
                     REPORT_ws._get_cell(row=23,column=base_col).value =cmt1 
-                    REPORT_ws._get_cell(row=24,column=base_col).value ='No cargo: ' + cmt2 
+                    # REPORT_ws._get_cell(row=24,column=base_col).value ='No cargo: ' + cmt2 
             else: 
                 REPORT_ws._get_cell(row=22,column=base_col).value = 'JAPAN: volume of this week is no change.'
         except:
@@ -334,30 +334,30 @@ def main():
                 for i in range(len(EU_list_change) - 1):
                     if(counter<10):
                         counter+=1
-                        if check_exist(EU_shipcode_list[i],EURO):
-                            if EU_list_change[i]<0:
-                                cmt1+= str(EU_shipcode_list[i]) + ' decreased ' + str(abs(EU_list_change[i])) + ' teus, '
-                        else:   cmt2+= str(EU_shipcode_list[i]) + ' , '
+                        # if check_exist(EU_shipcode_list[i],EURO):
+                        if EU_list_change[i]<0:
+                            cmt1+= str(EU_shipcode_list[i]) + ' decreased ' + str(abs(EU_list_change[i])) + ' teus, '
+                        # else:   cmt2+= str(EU_shipcode_list[i]) + ' , '
                 REPORT_ws._get_cell(row=31,column=base_col).value =cmt1 
-                REPORT_ws._get_cell(row=32,column=base_col).value ='No cargo: '+cmt2 
+                # REPORT_ws._get_cell(row=32,column=base_col).value ='No cargo: '+cmt2 
             elif get_colunm_total('FCL/20\'',EURO_LASTWEEK) +get_colunm_total('FCL/40\'',EURO_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',EURO_LASTWEEK)*2 < get_colunm_total('FCL/20\'',EURO) +get_colunm_total('FCL/40\'',EURO)*2 +get_colunm_total('FCL/40\'HQ',EURO)*2 :
                 REPORT_ws._get_cell(row=30,column=base_col).value = 'EURO: volume of this week had been increased than last week due to:'
                 if len(EU_list_change) <10 :
                     for i in range(len(EU_list_change)):
-                        if check_exist(EU_shipcode_list[i],EURO):
-                            if EU_list_change[i]>0:
-                                cmt1+= str(EU_shipcode_list[i]) + ' increased ' + str(EU_list_change[i]) + ' teus, ' 
-                        else:   cmt2+= str(EU_shipcode_list[i])
+                        # if check_exist(EU_shipcode_list[i],EURO):
+                        if EU_list_change[i]>0:
+                            cmt1+= str(EU_shipcode_list[i]) + ' increased ' + str(EU_list_change[i]) + ' teus, ' 
+                        # else:   cmt2+= str(EU_shipcode_list[i])
                     REPORT_ws._get_cell(row=31,column=base_col).value =cmt1 
-                    REPORT_ws._get_cell(row=32,column=base_col).value ='No cargo: ' + cmt2 
+                    # REPORT_ws._get_cell(row=32,column=base_col).value ='No cargo: ' + cmt2 
                 else :
                     for i in range(len(EU_list_change)-10,len(EU_list_change)):
-                        if check_exist(EU_shipcode_list[i],EURO):
-                            if EU_list_change[i]>0:
-                                cmt1+= str(EU_shipcode_list[i]) + ' increased ' + str(EU_list_change[i]) + ' teus, ' 
-                        else:   cmt2+= str(EU_shipcode_list[i])
+                        # if check_exist(EU_shipcode_list[i],EURO):
+                        if EU_list_change[i]>0:
+                            cmt1+= str(EU_shipcode_list[i]) + ' increased ' + str(EU_list_change[i]) + ' teus, ' 
+                        # else:   cmt2+= str(EU_shipcode_list[i])
                     REPORT_ws._get_cell(row=31,column=base_col).value =cmt1 
-                    REPORT_ws._get_cell(row=32,column=base_col).value ='No cargo: ' + cmt2 
+                    # REPORT_ws._get_cell(row=32,column=base_col).value ='No cargo: ' + cmt2 
             else: 
                 REPORT_ws._get_cell(row=30,column=base_col).value = 'EURO: volume of this week is no change.'
         except:
@@ -372,30 +372,30 @@ def main():
                     for i in range(len(MED_list_change) - 1):
                         if(counter<10):
                             counter+=1
-                            if check_exist(MED_shipcode_list[i],MED):
-                                if MED_list_change[i]<0:
-                                    cmt1+= str(MED_shipcode_list[i]) + ' decreased ' + str(abs(MED_list_change[i])) + ' teus, '
-                            else:   cmt2+= str(MED_shipcode_list[i]) + ' , '
+                            # if check_exist(MED_shipcode_list[i],MED):
+                            if MED_list_change[i]<0:
+                                cmt1+= str(MED_shipcode_list[i]) + ' decreased ' + str(abs(MED_list_change[i])) + ' teus, '
+                            # else:   cmt2+= str(MED_shipcode_list[i]) + ' , '
                     REPORT_ws._get_cell(row=34,column=base_col).value =cmt1 
-                    REPORT_ws._get_cell(row=35,column=base_col).value ='No cargo: '+cmt2 
+                    # REPORT_ws._get_cell(row=35,column=base_col).value ='No cargo: '+cmt2 
             elif get_colunm_total('FCL/20\'',MED_LASTWEEK) +get_colunm_total('FCL/40\'',MED_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',MED_LASTWEEK)*2 < get_colunm_total('FCL/20\'',MED) +get_colunm_total('FCL/40\'',MED)*2 +get_colunm_total('FCL/40\'HQ',MED)*2 :
                     REPORT_ws._get_cell(row=33,column=base_col).value = 'MED: volume of this week had been increased than last week due to:'
                     if len(MED_list_change) <10 :
                         for i in range(len(MED_list_change)):
-                            if check_exist(MED_shipcode_list[i],MED):
-                                if MED_list_change[i]>0:
-                                    cmt1+= str(MED_shipcode_list[i]) + ' increased ' + str(MED_list_change[i]) + ' teus, ' 
-                            else:   cmt2+= str(MED_shipcode_list[i])
+                            # if check_exist(MED_shipcode_list[i],MED):
+                            if MED_list_change[i]>0:
+                                cmt1+= str(MED_shipcode_list[i]) + ' increased ' + str(MED_list_change[i]) + ' teus, ' 
+                            # else:   cmt2+= str(MED_shipcode_list[i])
                         REPORT_ws._get_cell(row=34,column=base_col).value =cmt1 
-                        REPORT_ws._get_cell(row=35,column=base_col).value ='No cargo: ' + cmt2
+                        # REPORT_ws._get_cell(row=35,column=base_col).value ='No cargo: ' + cmt2
                     else:
                         for i in range(len(MED_list_change)-10 ,len(MED_list_change)):
-                            if check_exist(MED_shipcode_list[i],MED):
-                                if MED_list_change[i]>0:
-                                    cmt1+= str(MED_shipcode_list[i]) + ' increased ' + str(MED_list_change[i]) + ' teus, ' 
-                            else:   cmt2+= str(MED_shipcode_list[i])
+                            # if check_exist(MED_shipcode_list[i],MED):
+                            if MED_list_change[i]>0:
+                                cmt1+= str(MED_shipcode_list[i]) + ' increased ' + str(MED_list_change[i]) + ' teus, ' 
+                            # else:   cmt2+= str(MED_shipcode_list[i])
                         REPORT_ws._get_cell(row=34,column=base_col).value =cmt1 
-                        REPORT_ws._get_cell(row=35,column=base_col).value ='No cargo: ' + cmt2 
+                        # REPORT_ws._get_cell(row=35,column=base_col).value ='No cargo: ' + cmt2 
             else: 
                     REPORT_ws._get_cell(row=33,column=base_col).value = 'MED: volume of this week is no change.'
         except:
