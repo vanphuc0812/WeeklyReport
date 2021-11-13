@@ -1,4 +1,3 @@
-from re import I
 import openpyxl
 from openpyxl.workbook import workbook
 from openpyxl.worksheet import worksheet
@@ -8,8 +7,8 @@ print('----------------------This script is created by VanPhuc------------------
 print('----------------------This script is created by VanPhuc--------------------------------')
 print('----------------------This script is created by VanPhuc--------------------------------')
 print('')
-week =str(sys.argv[1])
-line_of_week =int(sys.argv[2])
+week =44 #str(sys.argv[1])
+line_of_week =94 #int(sys.argv[2])
 print('Preparing environment to create report for week ' + str(week) + ' in line '+ str(line_of_week))
 
 #Sample report
@@ -64,9 +63,10 @@ def find_indexOf(key,worksheet):
     col = 0
     for i in range(1,worksheet.max_row+1):
         for j in range(1,worksheet.max_column+1):
-            if str(worksheet.cell(i,j).value) == key:
-                ro=i
-                col=j
+            if worksheet.cell(i,j).value != None:
+                if str(worksheet.cell(i,j).value).strip() == key:
+                    ro=i
+                    col=j
     return ro,col
 
 def find_week(week) :
@@ -92,10 +92,10 @@ def get_column_num(key, worksheet):
             num += 1
     return num
 
-def get_list_shipcode(key,worksheet1,worksheet2) :
+def get_list_shipcode(worksheet1,worksheet2) :
     result= []
-    row1,col1=find_indexOf(key, worksheet)
-    row2,col2=find_indexOf(key, worksheet)
+    row1,col1=find_indexOf("Shipper Code", worksheet1)
+    row2,col2=find_indexOf("Shipper Code", worksheet2)
     for i in range(row1+1,worksheet1.max_row):
         result.append( worksheet1.cell(i,col1).value)
     for i in range(row2+1,worksheet2.max_row):
@@ -104,12 +104,13 @@ def get_list_shipcode(key,worksheet1,worksheet2) :
     return result
 def get_tues(worksheet,shipcode):
     tues=0
-    row,col= find_indexOf(shipcode)
-    row1,col1= find_indexOf('FCL/20\'')
-    row2,col2= find_indexOf('FCL/40\'')
-    row3,col3= find_indexOf('FCL40\'HQ')
-    row4,col4= find_indexOf('FCL/45\'')
-    tues = int(worksheet.cell(row,col1).value) + int(worksheet.cell(row,col2).value)*2 +int(worksheet.cell(row,col3).value)*2+int(worksheet.cell(row,col4).value)*2
+    row,col= find_indexOf(shipcode,worksheet)
+    if row != 0 :
+        row1,col1= find_indexOf('FCL/20\'',worksheet)
+        row2,col2= find_indexOf('FCL/40\'',worksheet)
+        row3,col3= find_indexOf('FCL/40\'HQ',worksheet)
+        row4,col4= find_indexOf('FCL/45\'',worksheet)
+        tues = int(worksheet.cell(row,col1).value) + int(worksheet.cell(row,col2).value)*2 +int(worksheet.cell(row,col3).value)*2+int(worksheet.cell(row,col4).value)*2
     return tues
 def compare_teus(worksheet1,worksheet2,list):
     list_result=[]
@@ -130,7 +131,7 @@ def sort(list1, list2):
 
 def check_exist(shipcode,worksheet):
     result=False
-    row,col= find_indexOf('Shipper Code')
+    row,col= find_indexOf('Shipper Code',worksheet)
     for i in range(row +1, worksheet.max_row):
             if worksheet.cell(i,col).value == shipcode: result=True
     return result
@@ -182,67 +183,67 @@ def main():
             print('')
         print('')
 
-    #TAIWAN
+        #TAIWAN
         try:
             #shpt/LCL
-            REPORT_ws._get_cell(row=int(line_of_week)+5,column=base_col).value= get_column_num('G',TAIWAN)
+            REPORT_ws._get_cell(row=int(line_of_week)+5,column=base_col).value= get_column_num('CFS(cbm)',TAIWAN)
             #CBM/LCL
-            REPORT_ws._get_cell(row=int(line_of_week)+5,column=base_col+2).value = get_colunm_total('G',TAIWAN)
+            REPORT_ws._get_cell(row=int(line_of_week)+5,column=base_col+2).value = get_colunm_total('CFS(cbm)',TAIWAN)
             #consol 
-            REPORT_ws._get_cell(row=int(line_of_week)+6,column=base_col+2).value = get_colunm_total('H',TAIWAN)+ get_colunm_total('I',TAIWAN)
-            REPORT_ws._get_cell(row=int(line_of_week)+6,column=base_col).value = get_column_num('H',TAIWAN)+ get_column_num('I',TAIWAN)
+            REPORT_ws._get_cell(row=int(line_of_week)+6,column=base_col+2).value = get_colunm_total('CNSL20(cbm)',TAIWAN)+ get_colunm_total('CNSL40(cbm)',TAIWAN)
+            REPORT_ws._get_cell(row=int(line_of_week)+6,column=base_col).value = get_column_num('CNSL20(cbm)',TAIWAN)+ get_column_num('CNSL40(cbm)',TAIWAN)
             #Teus/FCL
-            REPORT_ws._get_cell(row=int(line_of_week)+4,column=base_col+1).value = get_colunm_total('P',TAIWAN)+get_colunm_total('Q',TAIWAN)*2+get_colunm_total('R',TAIWAN)*2+get_colunm_total('S',TAIWAN)*2
+            REPORT_ws._get_cell(row=int(line_of_week)+4,column=base_col+1).value = get_colunm_total('FCL/20\'',TAIWAN)+get_colunm_total('FCL/40\'',TAIWAN)*2+get_colunm_total('FCL/40\'HQ',TAIWAN)*2+get_colunm_total('FCL/45\'',TAIWAN)*2
             #shpt/FCL
-            REPORT_ws._get_cell(row=int(line_of_week)+4,column=base_col).value = get_colunm_total('E',TAIWAN) - (get_column_num('H',TAIWAN)+ get_column_num('I',TAIWAN) + get_column_num('G',TAIWAN) )
+            REPORT_ws._get_cell(row=int(line_of_week)+4,column=base_col).value = get_colunm_total('HB/L SET(s)',TAIWAN) - (get_column_num('CNSL20(cbm)',TAIWAN)+ get_column_num('CNSL40(cbm)',TAIWAN) + get_column_num('CFS(cbm)',TAIWAN) )
             print('    Successfully finish report for TAIWAN')
         except:
             print('    Can not finish report for TAIWAN')
     #JAPAN
         try:
             #shpt/LCL
-            REPORT_ws._get_cell(row=int(line_of_week)+5,column=base_col+3).value = get_column_num('G',JAPAN)
+            REPORT_ws._get_cell(row=int(line_of_week)+5,column=base_col+3).value = get_column_num('CFS(cbm)',JAPAN)
             #CBM/LCL
-            REPORT_ws._get_cell(row=int(line_of_week)+5,column=base_col+5).value = get_colunm_total('G',JAPAN)
+            REPORT_ws._get_cell(row=int(line_of_week)+5,column=base_col+5).value = get_colunm_total('CFS(cbm)',JAPAN)
             #consol 
-            REPORT_ws._get_cell(row=int(line_of_week)+6,column=base_col+5).value = get_colunm_total('H',JAPAN)+ get_colunm_total('I',JAPAN)
-            REPORT_ws._get_cell(row=int(line_of_week)+6,column=base_col+3).value = get_column_num('H',JAPAN)+ get_column_num('I',JAPAN)
+            REPORT_ws._get_cell(row=int(line_of_week)+6,column=base_col+5).value = get_colunm_total('CNSL20(cbm)',JAPAN)+ get_colunm_total('CNSL40(cbm)',JAPAN)
+            REPORT_ws._get_cell(row=int(line_of_week)+6,column=base_col+3).value = get_column_num('CNSL20(cbm)',JAPAN)+ get_column_num('CNSL40(cbm)',JAPAN)
             #Teus/FCL
-            REPORT_ws._get_cell(row=int(line_of_week)+4,column=base_col+4).value = get_colunm_total('P',JAPAN)+get_colunm_total('Q',JAPAN)*2+get_colunm_total('R',JAPAN)*2+get_colunm_total('S',JAPAN)*2
+            REPORT_ws._get_cell(row=int(line_of_week)+4,column=base_col+4).value = get_colunm_total('FCL/20\'',JAPAN)+get_colunm_total('FCL/40\'',JAPAN)*2+get_colunm_total('FCL/40\'HQ',JAPAN)*2+get_colunm_total('FCL/45\'',JAPAN)*2
             #shpt/FCL
-            REPORT_ws._get_cell(row=int(line_of_week)+4,column=base_col+3).value = get_colunm_total('E',JAPAN) - (get_column_num('H',JAPAN)+ get_column_num('I',JAPAN) + get_column_num('G',JAPAN) )
+            REPORT_ws._get_cell(row=int(line_of_week)+4,column=base_col+3).value = get_colunm_total('HB/L SET(s)',JAPAN) - (get_column_num('CNSL20(cbm)',JAPAN)+ get_column_num('CNSL40(cbm)',JAPAN) + get_column_num('CFS(cbm)',JAPAN) )
             print('    Successfully finish report for JAPAN')
         except:
             print('    Can not finish report for JAPAN')
     #EURO
         try:
             #shpt/LCL
-            REPORT_ws._get_cell(row=int(line_of_week)+16,column=base_col+6).value = get_column_num('G',EURO)
+            REPORT_ws._get_cell(row=int(line_of_week)+16,column=base_col+6).value = get_column_num('CFS(cbm)',EURO)
             #CBM/LCL
-            REPORT_ws._get_cell(row=int(line_of_week)+16,column=base_col+8).value = get_colunm_total('G',EURO)
+            REPORT_ws._get_cell(row=int(line_of_week)+16,column=base_col+8).value = get_colunm_total('CFS(cbm)',EURO)
             #consol 
-            REPORT_ws._get_cell(row=int(line_of_week)+17,column=base_col+8).value = get_colunm_total('H',EURO)+ get_colunm_total('I',EURO)
-            REPORT_ws._get_cell(row=int(line_of_week)+17,column=base_col+6).value = get_column_num('H',EURO)+ get_column_num('I',EURO)
+            REPORT_ws._get_cell(row=int(line_of_week)+17,column=base_col+8).value = get_colunm_total('CNSL20(cbm)',EURO)+ get_colunm_total('CNSL40(cbm)',EURO)
+            REPORT_ws._get_cell(row=int(line_of_week)+17,column=base_col+6).value = get_column_num('CNSL20(cbm)',EURO)+ get_column_num('CNSL40(cbm)',EURO)
             #Teus/FCL
-            REPORT_ws._get_cell(row=int(line_of_week)+15,column=base_col+7).value = get_colunm_total('P',EURO)+get_colunm_total('Q',EURO)*2+get_colunm_total('R',EURO)*2+get_colunm_total('S',EURO)*2
+            REPORT_ws._get_cell(row=int(line_of_week)+15,column=base_col+7).value = get_colunm_total('FCL/20\'',EURO)+get_colunm_total('FCL/40\'',EURO)*2+get_colunm_total('FCL/40\'HQ',EURO)*2+get_colunm_total('FCL/45\'',EURO)*2
             #shpt/FCL
-            REPORT_ws._get_cell(row=int(line_of_week)+15,column=base_col+6).value = get_colunm_total('E',EURO) - (get_column_num('H',EURO)+ get_column_num('I',EURO) + get_column_num('G',EURO) )
+            REPORT_ws._get_cell(row=int(line_of_week)+15,column=base_col+6).value = get_colunm_total('HB/L SET(s)',EURO) - (get_column_num('CNSL20(cbm)',EURO)+ get_column_num('CNSL40(cbm)',EURO) + get_column_num('CFS(cbm)',EURO) )
             print('    Successfully finish report for EURO')
         except:
             print('    Can not finish report for EURO')
     #MED
         try:
             #shpt/LCL
-            REPORT_ws._get_cell(row=int(line_of_week)+16,column=base_col+9).value = get_column_num('G',MED)
+            REPORT_ws._get_cell(row=int(line_of_week)+16,column=base_col+9).value = get_column_num('CFS(cbm)',MED)
             #CBM/LCL
-            REPORT_ws._get_cell(row=int(line_of_week)+16,column=base_col+11).value = get_colunm_total('G',MED)
+            REPORT_ws._get_cell(row=int(line_of_week)+16,column=base_col+11).value = get_colunm_total('CFS(cbm)',MED)
             #consol 
-            REPORT_ws._get_cell(row=int(line_of_week)+17,column=base_col+11).value = get_colunm_total('H',MED)+ get_colunm_total('I',MED)
-            REPORT_ws._get_cell(row=int(line_of_week)+17,column=base_col+9).value = get_column_num('H',MED)+ get_column_num('I',MED)
+            REPORT_ws._get_cell(row=int(line_of_week)+17,column=base_col+11).value = get_colunm_total('CNSL20(cbm)',MED)+ get_colunm_total('CNSL40(cbm)',MED)
+            REPORT_ws._get_cell(row=int(line_of_week)+17,column=base_col+9).value = get_column_num('CNSL20(cbm)',MED)+ get_column_num('CNSL40(cbm)',MED)
             #Teus/FCL
-            REPORT_ws._get_cell(row=int(line_of_week)+15,column=base_col+10).value = get_colunm_total('P',MED)+get_colunm_total('Q',MED)*2+get_colunm_total('R',MED)*2+get_colunm_total('S',MED)*2
+            REPORT_ws._get_cell(row=int(line_of_week)+15,column=base_col+10).value = get_colunm_total('FCL/20\'',MED)+get_colunm_total('FCL/40\'',MED)*2+get_colunm_total('FCL/40\'HQ',MED)*2+get_colunm_total('FCL/45\'',MED)*2
             #shpt/FCL
-            REPORT_ws._get_cell(row=int(line_of_week)+15,column=base_col+9).value = get_colunm_total('E',MED) - (get_column_num('H',MED)+ get_column_num('I',MED) + get_column_num('G',MED) )
+            REPORT_ws._get_cell(row=int(line_of_week)+15,column=base_col+9).value = get_colunm_total('HB/L SET(s)',MED) - (get_column_num('CNSL20(cbm)',MED)+ get_column_num('CNSL40(cbm)',MED) + get_column_num('CFS(cbm)',MED) )
             print('    Successfully finish report for MED')
         except:
             print('    Can not finish report for MED')
@@ -251,7 +252,7 @@ def main():
             counter=0
             cmt1=''
             cmt2=''
-            if get_colunm_total('P',TAIWAN_LASTWEEK) +get_colunm_total('Q',TAIWAN_LASTWEEK)*2 +get_colunm_total('R',TAIWAN_LASTWEEK)*2 > get_colunm_total('P',TAIWAN) +get_colunm_total('Q',TAIWAN)*2 +get_colunm_total('R',TAIWAN)*2 :
+            if get_colunm_total('FCL/20\'',TAIWAN_LASTWEEK) +get_colunm_total('FCL/40\'',TAIWAN_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',TAIWAN_LASTWEEK)*2 > get_colunm_total('FCL/20\'',TAIWAN) +get_colunm_total('FCL/40\'',TAIWAN)*2 +get_colunm_total('FCL/40\'HQ',TAIWAN)*2 :
                 REPORT_ws._get_cell(row=26,column=base_col).value = 'TAIWAN: volume of this week had been decreased than last week due to:'
                 for i in range(len(list_change) - 1):
                     if(counter<10):
@@ -262,7 +263,7 @@ def main():
                         else:   cmt2+= str(shipcode_list[i]) + ' , '
                 REPORT_ws._get_cell(row=27,column=base_col).value =cmt1 
                 REPORT_ws._get_cell(row=28,column=base_col).value ='No cargo: '+cmt2 
-            elif get_colunm_total('P',TAIWAN_LASTWEEK) +get_colunm_total('Q',TAIWAN_LASTWEEK)*2 +get_colunm_total('R',TAIWAN_LASTWEEK)*2 < get_colunm_total('P',TAIWAN) +get_colunm_total('Q',TAIWAN)*2 +get_colunm_total('R',TAIWAN)*2 :
+            elif get_colunm_total('FCL/20\'',TAIWAN_LASTWEEK) +get_colunm_total('FCL/40\'',TAIWAN_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',TAIWAN_LASTWEEK)*2 < get_colunm_total('FCL/20\'',TAIWAN) +get_colunm_total('FCL/40\'',TAIWAN)*2 +get_colunm_total('FCL/40\'HQ',TAIWAN)*2 :
                 REPORT_ws._get_cell(row=26,column=base_col).value = 'TAIWAN: volume of this week had been increased than last week due to:'
                 if len(list_change) <10 :
                     for i in range(len(list_change)):
@@ -290,7 +291,7 @@ def main():
             counter=0
             cmt1=''
             cmt2=''
-            if get_colunm_total('P',JAPAN_LASTWEEK) +get_colunm_total('Q',JAPAN_LASTWEEK)*2 +get_colunm_total('R',JAPAN_LASTWEEK)*2 > get_colunm_total('P',JAPAN) +get_colunm_total('Q',JAPAN)*2 +get_colunm_total('R',JAPAN)*2 :
+            if get_colunm_total('FCL/20\'',JAPAN_LASTWEEK) +get_colunm_total('FCL/40\'',JAPAN_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',JAPAN_LASTWEEK)*2 > get_colunm_total('FCL/20\'',JAPAN) +get_colunm_total('FCL/40\'',JAPAN)*2 +get_colunm_total('FCL/40\'HQ',JAPAN)*2 :
                 REPORT_ws._get_cell(row=22,column=base_col).value = 'JAPAN: volume of this week had been decreased than last week due to:'
                 for i in range(len(JP_list_change) - 1):
                     if(counter<10):
@@ -301,7 +302,7 @@ def main():
                         else:   cmt2+= str(JP_shipcode_list[i]) + ' , '
                 REPORT_ws._get_cell(row=23,column=base_col).value =cmt1 
                 REPORT_ws._get_cell(row=24,column=base_col).value ='No cargo: '+cmt2 
-            elif get_colunm_total('P',JAPAN_LASTWEEK) +get_colunm_total('Q',JAPAN_LASTWEEK)*2 +get_colunm_total('R',JAPAN_LASTWEEK)*2 < get_colunm_total('P',JAPAN) +get_colunm_total('Q',JAPAN)*2 +get_colunm_total('R',JAPAN)*2 :
+            elif get_colunm_total('FCL/20\'',JAPAN_LASTWEEK) +get_colunm_total('FCL/40\'',JAPAN_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',JAPAN_LASTWEEK)*2 < get_colunm_total('FCL/20\'',JAPAN) +get_colunm_total('FCL/40\'',JAPAN)*2 +get_colunm_total('FCL/40\'HQ',JAPAN)*2 :
                 REPORT_ws._get_cell(row=22,column=base_col).value = 'JAPAN: volume of this week had been increased than last week due to:'
                 if len(JP_list_change) <10 :
                     for i in range(len(JP_list_change)):
@@ -328,7 +329,7 @@ def main():
             counter=0
             cmt1=''
             cmt2=''
-            if get_colunm_total('P',EURO_LASTWEEK) +get_colunm_total('Q',EURO_LASTWEEK)*2 +get_colunm_total('R',EURO_LASTWEEK)*2 > get_colunm_total('P',EURO) +get_colunm_total('Q',EURO)*2 +get_colunm_total('R',EURO)*2 :
+            if get_colunm_total('FCL/20\'',EURO_LASTWEEK) +get_colunm_total('FCL/40\'',EURO_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',EURO_LASTWEEK)*2 > get_colunm_total('FCL/20\'',EURO) +get_colunm_total('FCL/40\'',EURO)*2 +get_colunm_total('FCL/40\'HQ',EURO)*2 :
                 REPORT_ws._get_cell(row=30,column=base_col).value = 'EURO: volume of this week had been decreased than last week due to:'
                 for i in range(len(EU_list_change) - 1):
                     if(counter<10):
@@ -339,7 +340,7 @@ def main():
                         else:   cmt2+= str(EU_shipcode_list[i]) + ' , '
                 REPORT_ws._get_cell(row=31,column=base_col).value =cmt1 
                 REPORT_ws._get_cell(row=32,column=base_col).value ='No cargo: '+cmt2 
-            elif get_colunm_total('P',EURO_LASTWEEK) +get_colunm_total('Q',EURO_LASTWEEK)*2 +get_colunm_total('R',EURO_LASTWEEK)*2 < get_colunm_total('P',EURO) +get_colunm_total('Q',EURO)*2 +get_colunm_total('R',EURO)*2 :
+            elif get_colunm_total('FCL/20\'',EURO_LASTWEEK) +get_colunm_total('FCL/40\'',EURO_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',EURO_LASTWEEK)*2 < get_colunm_total('FCL/20\'',EURO) +get_colunm_total('FCL/40\'',EURO)*2 +get_colunm_total('FCL/40\'HQ',EURO)*2 :
                 REPORT_ws._get_cell(row=30,column=base_col).value = 'EURO: volume of this week had been increased than last week due to:'
                 if len(EU_list_change) <10 :
                     for i in range(len(EU_list_change)):
@@ -366,7 +367,7 @@ def main():
             counter=0
             cmt1=''
             cmt2=''
-            if get_colunm_total('P',MED_LASTWEEK) +get_colunm_total('Q',MED_LASTWEEK)*2 +get_colunm_total('R',MED_LASTWEEK)*2 > get_colunm_total('P',MED) +get_colunm_total('Q',MED)*2 +get_colunm_total('R',MED)*2 :
+            if get_colunm_total('FCL/20\'',MED_LASTWEEK) +get_colunm_total('FCL/40\'',MED_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',MED_LASTWEEK)*2 > get_colunm_total('FCL/20\'',MED) +get_colunm_total('FCL/40\'',MED)*2 +get_colunm_total('FCL/40\'HQ',MED)*2 :
                     REPORT_ws._get_cell(row=33,column=base_col).value = 'MED: volume of this week had been decreased than last week due to:'
                     for i in range(len(MED_list_change) - 1):
                         if(counter<10):
@@ -377,7 +378,7 @@ def main():
                             else:   cmt2+= str(MED_shipcode_list[i]) + ' , '
                     REPORT_ws._get_cell(row=34,column=base_col).value =cmt1 
                     REPORT_ws._get_cell(row=35,column=base_col).value ='No cargo: '+cmt2 
-            elif get_colunm_total('P',MED_LASTWEEK) +get_colunm_total('Q',MED_LASTWEEK)*2 +get_colunm_total('R',MED_LASTWEEK)*2 < get_colunm_total('P',MED) +get_colunm_total('Q',MED)*2 +get_colunm_total('R',MED)*2 :
+            elif get_colunm_total('FCL/20\'',MED_LASTWEEK) +get_colunm_total('FCL/40\'',MED_LASTWEEK)*2 +get_colunm_total('FCL/40\'HQ',MED_LASTWEEK)*2 < get_colunm_total('FCL/20\'',MED) +get_colunm_total('FCL/40\'',MED)*2 +get_colunm_total('FCL/40\'HQ',MED)*2 :
                     REPORT_ws._get_cell(row=33,column=base_col).value = 'MED: volume of this week had been increased than last week due to:'
                     if len(MED_list_change) <10 :
                         for i in range(len(MED_list_change)):
