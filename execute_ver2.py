@@ -7,8 +7,8 @@ print('----------------------This script is created by VanPhuc------------------
 print('----------------------This script is created by VanPhuc--------------------------------')
 print('----------------------This script is created by VanPhuc--------------------------------')
 print('')
-week =44 #str(sys.argv[1])
-line_of_week =94 #int(sys.argv[2])
+week =str(sys.argv[1])
+line_of_week =int(sys.argv[2])
 print('Preparing environment to create report for week ' + str(week) + ' in line '+ str(line_of_week))
 
 #Sample report
@@ -138,8 +138,6 @@ def check_exist(shipcode,worksheet):
 #--------------------------------------------------------------------------------------------------------------
 def main():
     base_col=find_week(week)
-    print(find_indexOf("GND TOTAL",TAIWAN))
-    print(get_colunm_total("HB/L SET(s)",TAIWAN))
     if(base_col!=0):
         print('')
         print('-------------------------------Data for TAIWAN-------------------------------')
